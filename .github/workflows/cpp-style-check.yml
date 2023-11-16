@@ -1,0 +1,25 @@
+name: C++ Style Check
+
+on: 
+  pull_request:
+    paths:
+      - '**.cpp'
+      - '**.hpp'
+
+jobs:
+  style-check:
+    name: Check C++ Code Style
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Install Clang-Format
+      run: sudo apt-get install clang-format
+
+    - name: Check Format
+      run: |
+        git fetch origin ${{ github.base_ref }}
+        git diff origin/${{ github.base_ref }} | clang-format-diff -p1 -style=llvm
+
